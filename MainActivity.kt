@@ -41,10 +41,19 @@ class MainActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, 2)
         recyclerView.layoutManager = layoutManager
 
-        videoAdapter = VideoAdapter(arrayListOf()) { video ->
-            // Aksi ketika video diklik (Nanti diarahkan ke Watch Activity)
-            Toast.makeText(this, "Membuka: ${video.title}", Toast.LENGTH_SHORT).show()
-        }
+        // Ubah bagian onItemClick di MainActivity.kt menjadi seperti ini:
+videoAdapter = VideoAdapter(arrayListOf()) { video ->
+    val intent = Intent(this, WatchActivity::class.java).apply {
+        putExtra("VIDEO_ID", video.id)
+        putExtra("CATEGORY_ID", video.category_id)
+        putExtra("TITLE", video.title)
+        putExtra("VIDEO_URL", video.video_url)
+        putExtra("IS_DOWNLOAD_FULL", video.is_download_full_on)
+        putExtra("DOWNLOAD_FULL_URL", video.download_full_url)
+        putExtra("VIEWS", video.views_count)
+    }
+    startActivity(intent)
+}
         recyclerView.adapter = videoAdapter
 
         // 3. Ambil data video Halaman 1 dari API
